@@ -157,7 +157,7 @@ UI includes:
 - Download Tailored Resume: disabled until successful generation
 - ATS Score: score from generated resume output
 
-## Script Commands (Like package.json)
+## Script Commands
 
 You can use short script-style commands:
 
@@ -167,33 +167,63 @@ make ui    # frontend only
 make dev   # backend + frontend together
 ```
 
-## One-Click Deploy To Hugging Face Spaces (GitHub Actions)
+## Deploy And Run On Hugging Face Spaces (GitHub Actions)
 
 This repo includes an automated deploy workflow:
 - [.github/workflows/deploy-hf-space.yml](/Users/ipreencekmr/Documents/resume-tailor/.github/workflows/deploy-hf-space.yml)
 
-### 1. Add GitHub repository secrets
+Target Space:
+- `ipreencekmr/resume-tailor`
+- URL: [https://huggingface.co/spaces/ipreencekmr/resume-tailor](https://huggingface.co/spaces/ipreencekmr/resume-tailor)
+
+### 1. Create Hugging Face token (one-time)
+
+1. Go to [https://huggingface.co/settings/tokens](https://huggingface.co/settings/tokens)
+2. Click `New token`
+3. Create a token with write access to Spaces
+4. Copy the generated token (`hf_...`)
+
+### 2. Add GitHub repository secret
 
 In your GitHub repo: `Settings -> Secrets and variables -> Actions -> New repository secret`
 
 - `HF_TOKEN`: Hugging Face User Access Token (write access to Spaces)
-- `HF_SPACE_REPO`: Space id in the format `username/space-name`
 
-### 2. Push to `main` or run manually
+### 3. Add runtime secret in Hugging Face Space settings
 
-- Push changes to `main`, or
-- Go to `Actions -> Deploy To Hugging Face Space -> Run workflow`
-
-The workflow will create the Space if missing and upload the current repo contents.
-
-### 3. Add runtime secrets in Hugging Face Space settings
-
-In `Space -> Settings -> Variables and secrets`, add:
-- `OPENAI_API_KEY`
+In Space `ipreencekmr/resume-tailor` -> `Settings -> Variables and secrets`, add:
+- Required:
+  - `OPENAI_API_KEY`
 - Optional:
   - `OPENAI_MODEL_DEFAULT`
   - `OPENAI_MODEL_REASONING`
   - `UI_DEFAULT_TECH_STACK`
+
+### 4. Deploy from GitHub
+
+- Push to `main`, or
+- Go to `Actions -> Deploy To Hugging Face Space -> Run workflow`
+
+The workflow uploads this repo to your Space and updates it automatically.
+
+### 5. Access the live application
+
+Open:
+- [https://huggingface.co/spaces/ipreencekmr/resume-tailor](https://huggingface.co/spaces/ipreencekmr/resume-tailor)
+
+Once the Space status is `Running`, the Gradio app UI is available with:
+- Resume upload
+- Role input
+- Generate button
+- ATS score output
+- Download tailored resume after successful generation
+
+### 6. If the app does not load
+
+Check:
+1. GitHub Action run logs (deployment step success)
+2. Hugging Face Space `Build Logs` / `Runtime Logs`
+3. Presence of `OPENAI_API_KEY` in Space secrets
 
 ## Sample Input / Output
 

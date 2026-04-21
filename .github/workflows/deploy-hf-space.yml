@@ -1,5 +1,8 @@
 name: Deploy To Hugging Face Space
 
+env:
+  HF_SPACE_REPO: ipreencekmr/resume-tailor
+
 on:
   workflow_dispatch:
   push:
@@ -16,15 +19,10 @@ jobs:
       - name: Validate required secrets
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
-          HF_SPACE_REPO: ${{ secrets.HF_SPACE_REPO }}
         run: |
           set -euo pipefail
           if [ -z "${HF_TOKEN:-}" ]; then
             echo "Missing required secret: HF_TOKEN"
-            exit 1
-          fi
-          if [ -z "${HF_SPACE_REPO:-}" ]; then
-            echo "Missing required secret: HF_SPACE_REPO (example: username/space-name)"
             exit 1
           fi
 
@@ -36,7 +34,7 @@ jobs:
       - name: Create or update Space
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
-          HF_SPACE_REPO: ${{ secrets.HF_SPACE_REPO }}
+          HF_SPACE_REPO: ${{ env.HF_SPACE_REPO }}
         run: |
           set -euo pipefail
           python - <<'PY'

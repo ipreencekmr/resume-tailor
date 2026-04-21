@@ -1,0 +1,130 @@
+ingestion:
+  description: |
+    Parse the resume input into strict JSON.
+
+    Resume payload:
+    {resume_payload}
+
+    Rules:
+    - Return only factual data found in the provided content.
+    - Do not infer unsupported details.
+    - Preserve measurable outcomes when present.
+    - Output valid JSON only.
+  expected_output: |
+    JSON object with keys:
+    - contact_info (object)
+    - professional_summary (string)
+    - skills (array of strings)
+    - experience (array of objects: title, company, location, dates, bullets[])
+    - projects (array of objects: name, tech[], bullets[])
+    - education (array of objects: degree, institution, dates, details[])
+
+profiling:
+  description: |
+    Normalize and enrich candidate profile from ingestion output.
+
+    Requirements:
+    - Group skills by category.
+    - Deduplicate synonymous skills.
+    - Keep all facts grounded in source content.
+    - Output valid JSON only.
+  expected_output: |
+    JSON object with keys:
+    - normalized_skills (object of category -> array of skills)
+    - core_strengths (array of strings)
+    - experience_highlights (array of strings)
+    - profile_constraints (array of strings)
+
+role_intelligence:
+  description: |
+    Analyze the target role and tech stack.
+
+    Target role:
+    {target_role}
+
+    Tech stack:
+    {tech_stack}
+
+    Requirements:
+    - Identify hard skills, soft skills, domain keywords, and action verbs.
+    - Prioritize the top ATS terms.
+    - Output valid JSON only.
+  expected_output: |
+    JSON object with keys:
+    - role_summary (string)
+    - must_have_keywords (array of strings)
+    - nice_to_have_keywords (array of strings)
+    - responsibilities (array of strings)
+    - preferred_impact_metrics (array of strings)
+
+tailoring:
+  description: |
+    Rewrite resume content to align with role requirements.
+
+    Constraints:
+    - No hallucinated experience.
+    - Transform only from existing candidate data.
+    - Quantify achievements where explicit metrics exist.
+    - Keep ATS readability high.
+    - Output valid JSON only.
+  expected_output: |
+    JSON object with keys:
+    - contact_info (object)
+    - professional_summary (string)
+    - skills (array of strings)
+    - experience (array of objects)
+    - projects (array of objects)
+    - education (array of objects)
+    - tailoring_notes (array of strings)
+
+ats_optimization:
+  description: |
+    Optimize tailored resume for ATS systems.
+
+    Requirements:
+    - Standard section labels only: Contact Info, Professional Summary, Skills, Experience, Projects, Education.
+    - Ensure keyword alignment from role analysis.
+    - Keep formatting simple and parser-friendly.
+    - Output valid JSON only.
+  expected_output: |
+    JSON object with keys:
+    - contact_info (object)
+    - professional_summary (string)
+    - skills (array of strings)
+    - experience (array of objects)
+    - projects (array of objects)
+    - education (array of objects)
+    - ats_keywords_used (array of strings)
+
+evaluation:
+  description: |
+    Evaluate ATS-optimized resume against role requirements.
+
+    Requirements:
+    - Return a score from 0 to 100.
+    - List missing high-priority keywords.
+    - Provide practical improvement suggestions.
+    - Output valid JSON only.
+  expected_output: |
+    JSON object with keys:
+    - overall_score (number)
+    - matched_keywords (array of strings)
+    - missing_keywords (array of strings)
+    - improvement_suggestions (array of strings)
+
+document:
+  description: |
+    Produce final clean document payload for DOCX generation.
+
+    Requirements:
+    - Keep only ATS-safe content.
+    - Ensure each section is concise and consistent.
+    - Output valid JSON only.
+  expected_output: |
+    JSON object with keys:
+    - contact_info (object)
+    - professional_summary (string)
+    - skills (array of strings)
+    - experience (array of objects)
+    - projects (array of objects)
+    - education (array of objects)

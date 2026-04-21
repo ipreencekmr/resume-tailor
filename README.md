@@ -27,7 +27,11 @@ resume-tailor/
   tasks.py
   crew.py
   api.py
+  app.py
   gradio_app.py
+  .github/
+    workflows/
+      deploy-hf-space.yml
   scripts/
     start_api.sh
     start_ui.sh
@@ -162,6 +166,34 @@ make api   # backend only
 make ui    # frontend only
 make dev   # backend + frontend together
 ```
+
+## One-Click Deploy To Hugging Face Spaces (GitHub Actions)
+
+This repo includes an automated deploy workflow:
+- [.github/workflows/deploy-hf-space.yml](/Users/ipreencekmr/Documents/resume-tailor/.github/workflows/deploy-hf-space.yml)
+
+### 1. Add GitHub repository secrets
+
+In your GitHub repo: `Settings -> Secrets and variables -> Actions -> New repository secret`
+
+- `HF_TOKEN`: Hugging Face User Access Token (write access to Spaces)
+- `HF_SPACE_REPO`: Space id in the format `username/space-name`
+
+### 2. Push to `main` or run manually
+
+- Push changes to `main`, or
+- Go to `Actions -> Deploy To Hugging Face Space -> Run workflow`
+
+The workflow will create the Space if missing and upload the current repo contents.
+
+### 3. Add runtime secrets in Hugging Face Space settings
+
+In `Space -> Settings -> Variables and secrets`, add:
+- `OPENAI_API_KEY`
+- Optional:
+  - `OPENAI_MODEL_DEFAULT`
+  - `OPENAI_MODEL_REASONING`
+  - `UI_DEFAULT_TECH_STACK`
 
 ## Sample Input / Output
 

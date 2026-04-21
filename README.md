@@ -14,6 +14,9 @@ pinned: false
 
 Production-oriented multi-agent resume tailoring pipeline using CrewAI.
 
+<img width="1465" height="710" alt="Screenshot 2026-04-21 at 10 48 15 PM" src="https://github.com/user-attachments/assets/6ab1891f-663a-4a4b-bf6a-0d227db05bc8" />
+
+
 ## Features
 - Parses PDF or DOCX resumes
 - Builds structured candidate profile
